@@ -13,10 +13,12 @@ function Assignments() {
   const role = localStorage.getItem("role");
   const token = localStorage.getItem("token");
 
-  // ✅ FIXED: same API URL for fetching assignments
+  const API_URL = import.meta.env.VITE_BASE_URL;
+
+  
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/assignments", {
+      .get(`${API_URL}/api/assignments`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setAssignments(res.data))
@@ -25,20 +27,16 @@ function Assignments() {
 
   const handleAdd = async () => {
     if (role !== "Teacher") return alert("Only teachers can post assignments");
-    const res = await axios.post(
-      "http://localhost:8000/api/assignments",
-      newAssignment,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const res = await axios.post(`${API_URL}/api/assignments`, newAssignment, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setAssignments([...assignments, res.data]);
   };
 
   const handleDelete = async (id) => {
     if (role !== "Teacher")
       return alert("Only teachers can delete assignments");
-    await axios.delete(`http://localhost:8000/api/assignments/${id}`, {
+    await axios.delete(`${API_URL}/api/assignments/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setAssignments(assignments.filter((a) => a._id !== id));

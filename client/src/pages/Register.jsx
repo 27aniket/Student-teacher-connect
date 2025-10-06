@@ -10,8 +10,10 @@ function Register() {
   const [role, setRole] = useState("Student");
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.VITE_BASE_URL;
+
   const handleRegister = async () => {
-    await axios.post("http://localhost:8000/api/auth/register", {
+    await axios.post(`${API_URL}/api/auth/register`, {
       name,
       email,
       password,
